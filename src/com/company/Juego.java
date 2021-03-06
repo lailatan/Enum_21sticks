@@ -23,6 +23,8 @@ public class Juego {
         darBienvenida();
         preguntarDificultad();
         preguntarQuienEmpieza();
+        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.println("Empecemos.....");
         while (palitos>1)
             jugarTurno();
         mostrarGanador();
@@ -36,13 +38,13 @@ public class Juego {
     private void jugarTurno() {
         if (turnoUsuario) jugarTurnoUsuario();
         else jugarTurnoPC();
-        System.out.println("Quedan " + palitos + " palitos.");
+        System.out.println((palitos==1)?"Queda " + palitos + " palito.":"Quedan " + palitos + " palitos.");
         System.out.println();
     }
 
     private void jugarTurnoPC() {
         Integer cantidadPalitos = elegirCantidadPalitosASacar();
-        System.out.println("Yo quito " + cantidadPalitos + " palitos...");
+        System.out.println("Mi turno: quito " + cantidadPalitos + (cantidadPalitos==1?" palito...":" palitos..."));
         restarPalitos(cantidadPalitos);
         turnoUsuario=true;
     }
@@ -76,15 +78,15 @@ public class Juego {
 
     private void restarPalitos(Integer cantidadPalitos) {
         palitos-= cantidadPalitos;
-        //if (palitos<2) ganadorUsuario=turnoUsuario;
-        if (palitos==1) ganadorUsuario=turnoUsuario;
-        if (palitos==0) ganadorUsuario=!turnoUsuario;
+        if (palitos<2)
+            ganadorUsuario=(palitos==1)?turnoUsuario:!turnoUsuario;
     }
 
     private void preguntarQuienEmpieza() {
         System.out.print("¿Querés jugar primero? (S/N): ");
         String respuesta = scanner.nextLine();
         turnoUsuario =  (respuesta.toUpperCase().contains("S"));
+        if (!turnoUsuario) System.out.println("Empiezo YO.");
         System.out.println();
     }
 

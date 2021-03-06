@@ -8,6 +8,7 @@ public class Juego {
     private Integer palitos;
     private Boolean ganadorUsuario;
     private Boolean turnoUsuario;
+    private Integer topeDificil;
     Scanner scanner = new Scanner(System.in);
     Random random= new Random();
 
@@ -16,6 +17,7 @@ public class Juego {
         ganadorUsuario=false;
         turnoUsuario=false;
         dificultad=Dificultad.BAJA;
+        topeDificil=8;
     }
 
 
@@ -50,12 +52,20 @@ public class Juego {
     }
 
     private Integer elegirCantidadPalitosASacar() {
-        if (dificultad==Dificultad.ALTA) {
+        if (tocaJugadaDificil()) {
+            //System.out.println("#### dificil");
             if (convieneSacar(palitos - 2)) return 2;
             else return 1;
         } else {
+            //System.out.println("#### facil");
             return random.nextInt(1)+1;
         }
+    }
+
+    private Boolean tocaJugadaDificil() {
+        Integer numeroAzar= random.nextInt(10);
+        //System.out.println("#### " + numeroAzar);
+        return numeroAzar>topeDificil;
     }
 
     private boolean convieneSacar(Integer palitosRestantes) {
@@ -102,11 +112,16 @@ public class Juego {
             if (opcion<1 || opcion>3) System.out.println("Cantidad inválida.");
         } while (opcion<1 || opcion>3);
 
-        if (opcion==2){
-            if (random.nextInt(9)<7) opcion=1;
-            else opcion=3;
+        switch (opcion){
+            case 1: dificultad=Dificultad.BAJA;
+                    topeDificil=8;
+                    break;
+            case 2: dificultad=Dificultad.MEDIA;
+                    topeDificil=5;
+                    break;
+            case 3: dificultad=Dificultad.ALTA;
+                    topeDificil=3;
         }
-        dificultad =  (opcion==1)?Dificultad.BAJA:Dificultad.ALTA;
         System.out.println();
     }
 

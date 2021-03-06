@@ -9,6 +9,7 @@ public class Juego {
     private Boolean ganadorUsuario;
     private Boolean turnoUsuario;
     Scanner scanner = new Scanner(System.in);
+    Random random= new Random();
 
     public Juego() {
         palitos=21;
@@ -28,7 +29,7 @@ public class Juego {
     }
 
     private void mostrarGanador() {
-        String msjGanador= ganadorUsuario?"GANASTE!!":"PERDISTE";
+        String msjGanador= ganadorUsuario?"GANASTE!!":"PERDISTE...";
         System.out.println(msjGanador);
     }
 
@@ -36,6 +37,7 @@ public class Juego {
         if (turnoUsuario) jugarTurnoUsuario();
         else jugarTurnoPC();
         System.out.println("Quedan " + palitos + " palitos.");
+        System.out.println();
     }
 
     private void jugarTurnoPC() {
@@ -50,7 +52,6 @@ public class Juego {
             if (convieneSacar(palitos - 2)) return 2;
             else return 1;
         } else {
-            Random random = new Random();
             return random.nextInt(1)+1;
         }
     }
@@ -75,23 +76,43 @@ public class Juego {
 
     private void restarPalitos(Integer cantidadPalitos) {
         palitos-= cantidadPalitos;
-        if (palitos<2) ganadorUsuario=turnoUsuario;
+        //if (palitos<2) ganadorUsuario=turnoUsuario;
+        if (palitos==1) ganadorUsuario=turnoUsuario;
+        if (palitos==0) ganadorUsuario=!turnoUsuario;
     }
 
     private void preguntarQuienEmpieza() {
         System.out.print("¿Querés jugar primero? (S/N): ");
         String respuesta = scanner.nextLine();
         turnoUsuario =  (respuesta.toUpperCase().contains("S"));
+        System.out.println();
     }
 
     private void preguntarDificultad() {
-        System.out.print("¿Querés jugar fácil? (S/N): ");
-        String respuesta = scanner.nextLine();
-        dificultad =  (respuesta.toUpperCase().contains("S"))?Dificultad.BAJA:Dificultad.ALTA;
+        Integer opcion=0;
+        do {
+            System.out.println("Elegí el nivel de dificultad: ");
+            System.out.println("    1. Fácil");
+            System.out.println("    2. Intermedio");
+            System.out.println("    3. Imposible");
+            System.out.print("Opción: ");
+            opcion = Integer.parseInt(scanner.nextLine());
+            if (opcion<1 || opcion>3) System.out.println("Cantidad inválida.");
+        } while (opcion<1 || opcion>3);
+
+        if (opcion==2){
+            if (random.nextInt(9)<7) opcion=1;
+            else opcion=3;
+        }
+        dificultad =  (opcion==1)?Dificultad.BAJA:Dificultad.ALTA;
+        System.out.println();
     }
 
     private void darBienvenida() {
-        System.out.println("Bienvenido al juego 21 palitos");
+        System.out.println("*******************************************");
+        System.out.println("**     Bienvenido al juego 21 Palitos    **");
+        System.out.println("*******************************************");
+        System.out.println();
     }
 
 }

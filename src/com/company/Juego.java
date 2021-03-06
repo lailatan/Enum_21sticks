@@ -1,8 +1,10 @@
 package com.company;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Juego {
+    private Dificultad dificultad;
     private Integer palitos;
     private Boolean ganadorUsuario;
     private Boolean turnoUsuario;
@@ -12,11 +14,13 @@ public class Juego {
         palitos=21;
         ganadorUsuario=false;
         turnoUsuario=false;
+        dificultad=Dificultad.BAJA;
     }
 
 
     public void jugar(){
         darBienvenida();
+        preguntarDificultad();
         preguntarQuienEmpieza();
         while (palitos>1)
             jugarTurno();
@@ -42,8 +46,13 @@ public class Juego {
     }
 
     private Integer elegirCantidadPalitosASacar() {
-        if (convieneSacar(palitos-2)) return 2;
-        else return 1;
+        if (dificultad==Dificultad.ALTA) {
+            if (convieneSacar(palitos - 2)) return 2;
+            else return 1;
+        } else {
+            Random random = new Random();
+            return random.nextInt(1)+1;
+        }
     }
 
     private boolean convieneSacar(Integer palitosRestantes) {
@@ -73,6 +82,12 @@ public class Juego {
         System.out.print("¿Querés jugar primero? (S/N): ");
         String respuesta = scanner.nextLine();
         turnoUsuario =  (respuesta.toUpperCase().contains("S"));
+    }
+
+    private void preguntarDificultad() {
+        System.out.print("¿Querés jugar fácil? (S/N): ");
+        String respuesta = scanner.nextLine();
+        dificultad =  (respuesta.toUpperCase().contains("S"))?Dificultad.BAJA:Dificultad.ALTA;
     }
 
     private void darBienvenida() {
